@@ -1,0 +1,54 @@
+A51 MACRO ASSEMBLER  ADD                                                                  05/06/2024 18:53:31 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\add.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE add.s SET(SMALL) DEBUG PRINT(.\Listings\add.lst) OBJECT(.\Objects\add.o
+                      bj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 00H
+0000 75A0FF            2     MOV P2, #0FFH 
+0003 D2B2              3     SETB P3.2
+0005 12001D            4     INPUT1: LCALL READ
+0008 F8                5                     MOV R0, A 
+0009 12001D            6     INPUT2: LCALL READ
+000C F9                7                     MOV R1, A 
+000D 38                8                     ADDC A, R0 
+000E 120025            9                     LCALL BUTTON 
+0011 F580             10                     MOV P0, A 
+0013 120025           11                     LCALL BUTTON 
+0016 758000           12                     MOV P0, #00H
+0019 9280             13                     MOV P0.0, C 
+001B 80FE             14     HERE: SJMP HERE 
+001D 120025           15     READ: LCALL BUTTON
+0020 E5A0             16                     MOV A, P2 
+0022 F580             17                     MOV P0, A 
+0024 22               18                     RET
+0025 20B2FD           19     BUTTON: JB P3.2, BUTTON 
+                      20     
+0028 22               21     RET
+                      22     END
+A51 MACRO ASSEMBLER  ADD                                                                  05/06/2024 18:53:31 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+BUTTON . . . . . .  C ADDR   0025H   A   
+HERE . . . . . . .  C ADDR   001BH   A   
+INPUT1 . . . . . .  C ADDR   0005H   A   
+INPUT2 . . . . . .  C ADDR   0009H   A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+READ . . . . . . .  C ADDR   001DH   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

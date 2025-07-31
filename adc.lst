@@ -1,0 +1,45 @@
+A51 MACRO ASSEMBLER  ADC                                                                  07/10/2024 21:05:06 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\adc.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE adc.s SET(SMALL) DEBUG PRINT(.\Listings\adc.lst) OBJECT(.\Objects\adc.o
+                      bj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     ORG 00H
+0000 75A0FF            2     MOV P2,#0FFH
+0003 C290              3     REP:CLR P1.0 ;CS
+0005 C291              4             CLR P1.1 ;WR
+0007 120015            5             LCALL DELAY
+000A D291              6             SETB P1.1
+000C D292              7             SETB P1.2 ;RD
+000E 2093FD            8     NOW:JB P1.3,NOW ;INTR
+0011 C292              9             CLR P1.2
+0013 80FE             10     HERE: SJMP HERE
+0015 7EFF             11     DELAY: MOV R6, #0FFH
+0017 DEFE             12     DELAY1:DJNZ R6, DELAY1
+0019 22               13             RET
+                      14     END
+A51 MACRO ASSEMBLER  ADC                                                                  07/10/2024 21:05:06 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+DELAY. . . . . . .  C ADDR   0015H   A   
+DELAY1 . . . . . .  C ADDR   0017H   A   
+HERE . . . . . . .  C ADDR   0013H   A   
+NOW. . . . . . . .  C ADDR   000EH   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+REP. . . . . . . .  C ADDR   0003H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

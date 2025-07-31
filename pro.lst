@@ -1,0 +1,246 @@
+C51 COMPILER V9.60.7.0   PRO                                                               07/09/2024 13:40:30 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE PRO
+OBJECT MODULE PLACED IN .\Objects\pro.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE pro.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\pro.l
+                    -st) TABS(2) OBJECT(.\Objects\pro.obj)
+
+line level    source
+
+   1          #include <Wire.h>
+*** WARNING C318 IN LINE 1 OF pro.c: can't open file 'Wire.h'
+   2          #include <LiquidCrystal_I2C.h>
+*** WARNING C318 IN LINE 2 OF pro.c: can't open file 'LiquidCrystal_I2C.h'
+   3          
+   4          
+   5          // Default address 0x27, 20 chars, 4 lines
+   6          LiquidCrystal_I2C lcd(0x27,20,4);
+*** ERROR C129 IN LINE 6 OF pro.c: missing ';' before 'lcd'
+   7          
+   8          
+   9          int airVal = 684;
+  10          int waterVal = 312;
+  11          const int sensorPin = A0;
+  12          int measuredVal = 0;
+  13          int highestVal = 0;
+  14          int lowestVal = 30000;
+  15          int soilMoisturePercent = 0;
+  16          int previousSoilMoisturePercent = 0;
+  17          bool WlanOnline = false;
+  18          
+  19          
+  20          // Custom symbols for WLAN connection
+  21          byte wlanSym[8] = {
+  22          
+  23            0b00000,
+  24            0b00000,
+  25            0b00000,
+  26            0b11100,
+  27            0b00010,
+  28            0b11001,
+  29            0b00101,
+  30            0b10101
+  31          
+  32          };
+  33          
+  34          byte wlanSymOk[8] = {
+  35          
+  36            0b00000,
+  37            0b00000,
+  38            0b00000,
+  39            0b00001,
+  40            0b00001,
+  41            0b10010,
+  42            0b01010,
+  43            0b00100
+  44          
+  45          };
+  46          
+  47          byte wlanSymErr[8] = {
+  48          
+  49            0b00000,
+  50            0b00000,
+  51            0b00000,
+C51 COMPILER V9.60.7.0   PRO                                                               07/09/2024 13:40:30 PAGE 2   
+
+  52            0b10001,
+  53            0b01010,
+  54            0b00100,
+  55            0b01010,
+  56            0b10001
+  57          
+  58          };
+  59          
+  60          
+  61          void setup() {
+  62            
+  63            Serial.begin(115200);
+  64            lcd.init();
+  65            lcd.backlight();
+  66          
+  67            lcd.createChar(8, wlanSym);
+  68            lcd.createChar(9, wlanSymOk);
+  69            lcd.createChar(10, wlanSymErr);
+  70          
+  71          }
+  72          
+  73          
+  74          
+  75          void loop() {
+  76          
+  77            // Print edges top left and down right
+  78            lcd.setCursor(0,0);
+  79            lcd.write(0xA2);
+  80            lcd.setCursor(19,3);
+  81            lcd.write(0xA3);
+  82          
+  83            lcd.setCursor(3,0);
+  84            lcd.print("# Petersilie #");
+  85            
+  86            // Measure air value (0%) to calibrate
+  87            //measureAir();
+  88          
+  89            // Measure water value (100%) to calibrate
+  90            //measureWater();
+  91          
+  92            // Measure and display current values
+  93            measureSoil();
+  94          
+  95            // Raw values for debugging purposes
+  96            //rawVals();
+  97          
+  98            delay(250);
+  99            
+ 100          }
+ 101          
+ 102          
+ 103          
+ 104          void measureSoil(){
+ 105          
+ 106            measuredVal = analogRead(sensorPin);
+ 107            soilMoisturePercent = map(measuredVal, airVal, waterVal, 0, 100);
+ 108          
+ 109            if(soilMoisturePercent > 100){
+ 110          
+ 111              // Debug
+ 112              //Serial.println("Error: Moisture too high! Please calibrate.");
+ 113          
+C51 COMPILER V9.60.7.0   PRO                                                               07/09/2024 13:40:30 PAGE 3   
+
+ 114              lcd.clear();
+ 115              lcd.setCursor(0,0);
+ 116              lcd.print("ERROR");
+ 117              lcd.setCursor(0,1);
+ 118              lcd.print("PLEASE RECALIBRATE");
+ 119          
+ 120            }
+ 121          
+ 122            else if(soilMoisturePercent < 0){
+ 123          
+ 124              // Debug
+ 125              //Serial.println("Error: Moisture too low! Please calibrate.");
+ 126          
+ 127              lcd.clear();
+ 128              lcd.setCursor(0,0);
+ 129              lcd.print("ERROR");
+ 130              lcd.setCursor(0,1);
+ 131              lcd.print("PLEASE RECALIBRATE");
+ 132          
+ 133            }
+ 134          
+ 135            else if(soilMoisturePercent <= 100 && soilMoisturePercent >= 0){
+ 136          
+ 137              // Debug
+ 138              //Serial.print("Feuchtigkeit: ");
+ 139              //Serial.print(soilMoisturePercent);
+ 140              //Serial.println(" %");
+ 141          
+ 142              if(soilMoisturePercent != previousSoilMoisturePercent){
+ 143          
+ 144                lcd.setCursor(4,1);
+ 145                lcd.print("Feuchtigkeit");
+ 146                // Clear line
+ 147                lcd.setCursor(0,2);
+ 148                lcd.print("                   ");
+ 149                
+ 150                lcd.setCursor(8,2);
+ 151                lcd.print(soilMoisturePercent);
+ 152                lcd.print(" %");
+ 153          
+ 154                previousSoilMoisturePercent = soilMoisturePercent;
+ 155                
+ 156              }
+ 157          
+ 158            }
+ 159          
+ 160            if (WlanOnline == true){
+ 161          
+ 162              lcd.setCursor(0,3);
+ 163              lcd.write((byte)8);
+ 164              lcd.write((byte)9);
+ 165              
+ 166            }
+ 167          
+ 168            else{
+ 169          
+ 170              lcd.setCursor(0,3);
+ 171              lcd.write((byte)8);
+ 172              lcd.write((byte)10);
+ 173          
+ 174            }
+ 175          
+C51 COMPILER V9.60.7.0   PRO                                                               07/09/2024 13:40:30 PAGE 4   
+
+ 176          }
+ 177          
+ 178          
+ 179          
+ 180          void rawVals(){
+ 181          
+ 182            measuredVal = analogRead(sensorPin);
+ 183          
+ 184            Serial.print("Current value: ");
+ 185            Serial.println(measuredVal);
+ 186          
+ 187            delay(250);
+ 188            
+ 189          }
+ 190          
+ 191          
+ 192          
+ 193          void measureAir(){
+ 194          
+ 195            measuredVal = analogRead(sensorPin);
+ 196            
+ 197            if (measuredVal > highestVal){
+ 198          
+ 199              highestVal = measuredVal;
+ 200          
+ 201            }
+ 202            
+ 203            Serial.print("Highest current AIR value: ");
+ 204            Serial.println(highestVal);
+ 205          
+ 206            delay(250);
+ 207            
+ 208          }
+ 209          
+ 210          
+ 211          
+ 212          void measureWater(){
+ 213          
+ 214            measuredVal = analogRead(sensorPin);
+ 215            
+ 216            if (measuredVal < lowestVal){
+ 217          
+ 218              lowestVal = measuredVal;
+ 219          
+ 220            }
+ 221            
+ 222            Serial.print("Lowest current WATER value: ");
+ 223            Serial.println(lowestVal);
+ 224          
+ 225          }
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  1 ERROR(S)

@@ -1,0 +1,112 @@
+A51 MACRO ASSEMBLER  BUBBLE                                                               07/10/2024 22:14:50 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\bubble.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE bubble.s SET(SMALL) DEBUG PRINT(.\Listings\bubble.lst) OBJECT(.\Objects
+                      \bubble.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     
+                       2             ;;SORTING
+                       3     ;;MOV P2, #0FFH
+                       4     ;;SETB P3.2
+                       5     ;;MOV R0, #05H
+                       6     ;;MOV R1, #50H
+                       7     ;;INPUT: LCALL READ
+                       8     ;;      MOV @ R1, A
+                       9     ;;      INC R1
+                      10     ;;      DJNZ R0, INPUT
+                      11     
+                      12             ;;SECOND LARGEST
+                      13             
+                      14             ;;LED BLINKIN
+                      15     ;CLR P0.1
+                      16     ;MOV TMOD, #01H
+                      17     ;INP: SETB P0.1
+                      18     ;       ACALL REP
+                      19     ;ONP: CLR P0.1
+                      20     ;       ACALL REP
+                      21     ;       ACALL REP
+                      22     ;       SJMP INP
+                      23     ;REP: MOV TH0, #0FCH
+                      24     ;       MOV TL0, #019H
+                      25     ;       SETB TR0
+                      26     ;DELTA: JNB TF0, DELTA
+                      27     ;       CLR TR0
+                      28     ;       CLR TF0
+                      29     ;       DJNZ R0, REP
+                      30     ;       RET
+                      31     ;END
+                      32     
+                      33             ;;BUBBLESORT
+                      34     ;START: MOV P2, #0FFH
+                      35     ;       SETB P3.2
+                      36     ;       MOV R0,#40H
+                      37     ;       MOV R2,#05H
+                      38     ;INPUT: LCALL READ
+                      39     ;       MOV @R0,A
+                      40     ;       INC R0
+                      41     ;       DJNZ R2, INPUT
+                      42     ;HERE: MOV R0, #40H
+                      43     
+                      44             ;;GENERAL
+                      45     ;READ:LCALL BUTTON
+                      46     ;       MOV A, P2
+                      47     ;       MOV P0, A
+                      48     ;       RET
+                      49     ;BUTTON: JB P3.2, BUTTON
+                      50     ;WAIT: JNB P3.2, WAIT
+                      51     ;       RET
+                      52     ;END
+                      53     
+                      54     ;; sort
+0000                  55     ORG 0000
+0000 7940             56     MOV R1,#40H
+0002 7B04             57     MOV R3,#04H
+A51 MACRO ASSEMBLER  BUBBLE                                                               07/10/2024 22:14:50 PAGE     2
+
+0004 1B               58     DEC R3
+0005 8B06             59     MOV 06H,R3
+0007 850302           60     LOOP1: MOV 02H,03H
+000A 87F0             61     MOV B,@R1
+000C 850100           62     MOV 00H,01H
+000F 08               63     INC R0
+0010 E8               64     LOOP2: MOV A,R0
+0011 B5F002           65     CJNE A,B, CHECK
+0014 8007             66     SJMP CONTINUE
+0016 5005             67     CHECK: JNC CONTINUE
+0018 A6F0             68     MOV @R0,B
+001A F7               69     MOV @R1,A
+001B 87F0             70     MOV B,@R1
+001D 08               71     CONTINUE:INC R0
+001E DAF0             72     DJNZ R2,LOOP2
+0020 09               73     INC R1
+0021 DBE4             74     DJNZ R3, LOOP1
+0023 743F             75     MOV A,#3FH
+0025 2E               76     ADD A,R6
+0026 F8               77     MOV R0,A
+0027 8690             78     MOV P1,@R0
+                      79     ;SUMP $
+                      80     END
+A51 MACRO ASSEMBLER  BUBBLE                                                               07/10/2024 22:14:50 PAGE     3
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+B. . . . . . . . .  D ADDR   00F0H   A   
+CHECK. . . . . . .  C ADDR   0016H   A   
+CONTINUE . . . . .  C ADDR   001DH   A   
+LOOP1. . . . . . .  C ADDR   0007H   A   
+LOOP2. . . . . . .  C ADDR   0010H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

@@ -1,0 +1,71 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    07/10/2024  22:14:50  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\bubble.obj TO .\Objects\project PRINT (.\Listings\project.m51)
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\bubble.obj (BUBBLE)
+
+
+LINK MAP OF MODULE:  .\Objects\project (BUBBLE)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0029H     ABSOLUTE     
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\project (BUBBLE)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        BUBBLE
+  D:00F0H         SYMBOL        B
+  C:0016H         SYMBOL        CHECK
+  C:001DH         SYMBOL        CONTINUE
+  C:0007H         SYMBOL        LOOP1
+  C:0010H         SYMBOL        LOOP2
+  D:0090H         SYMBOL        P1
+  C:0000H         LINE#         56
+  C:0002H         LINE#         57
+  C:0004H         LINE#         58
+  C:0005H         LINE#         59
+  C:0007H         LINE#         60
+  C:000AH         LINE#         61
+  C:000CH         LINE#         62
+  C:000FH         LINE#         63
+  C:0010H         LINE#         64
+  C:0011H         LINE#         65
+  C:0014H         LINE#         66
+  C:0016H         LINE#         67
+  C:0018H         LINE#         68
+  C:001AH         LINE#         69
+  C:001BH         LINE#         70
+  C:001DH         LINE#         71
+  C:001EH         LINE#         72
+  C:0020H         LINE#         73
+  C:0021H         LINE#         74
+  C:0023H         LINE#         75
+  C:0025H         LINE#         76
+  C:0026H         LINE#         77
+  C:0027H         LINE#         78
+  -------         ENDMOD        BUBBLE
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  07/10/2024  22:14:50  PAGE 2
+
+
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0029H BYTE ( 2%) *
+******************************************************************************
+
+Program Size: data=8.0 xdata=0 code=41
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
